@@ -1,16 +1,27 @@
+using Core;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.Use(async (Context, next) =>
-{
-    if (Context.Request.Method == HttpMethods.Get && Context.Request.Query["Custom"] == "True")
-    {
-        Context.Response.ContentType = "text/plain";
-        await Context.Response.WriteAsync("Custom Middleware \n");
-    }
+/*
+ * Output ->
+ * a. if url is localhost:3000/short then if condition will work and Request short-circuited display on browser.
+ * b. if url is differ from above then else condition run & bcoz of await next(), the next middleware component get's called.
+ */
 
-    await next();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/short")
+    {
+        await context.Response.WriteAsync("Request short-circuited");
+    }
+    else
+    {
+        await next();
+    }
 });
+
+app.UseMiddleware<Middleware>();
 
 app.MapGet("/", () => "Hello World!");
 app.MapGet("/hello", () => "Welcome Shishir to .Net world");
