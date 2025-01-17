@@ -3,12 +3,12 @@ using Core;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-
-
-app.Use(async (context, next) =>
+((IApplicationBuilder)app).Map("/branch", branch =>
 {
-    await next();
-    await context.Response.WriteAsync($"\n Status Code : {context.Response.StatusCode}");
+    app.Use(async (HttpContext context, Func<Task> next) =>
+    {
+        await context.Response.WriteAsync("Branch Middleware");
+    });
 });
 
 app.UseMiddleware<Middleware>();
