@@ -10,13 +10,14 @@ builder.Services.Configure<FruitOptions>(Options =>
 
 var app = builder.Build();
 
-app.MapGet("/fruits", async (HttpContext context, IOptions<FruitOptions> FruitOptions) =>
-{
-    FruitOptions options = FruitOptions.Value;
-    await context.Response.WriteAsync(options.Name + " " + options.Colour);
-});
+//app.MapGet("/fruits", async (HttpContext context, IOptions<FruitOptions> FruitOptions) =>
+//{
+//    FruitOptions options = FruitOptions.Value;
+//    await context.Response.WriteAsync(options.Name + " " + options.Colour);
+//});
 
 app.UseMiddleware<Middleware>();
+app.UseMiddleware<FruitOptionsMiddleware>();
 
 app.MapGet("/", () => "Hello World!");
 app.MapGet("/hello", () => "Welcome Shishir to .Net world");
