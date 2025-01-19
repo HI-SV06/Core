@@ -4,6 +4,7 @@
     {
         private RequestDelegate _next;
 
+
         public Middleware(RequestDelegate next)
         {
             _next = next;
@@ -19,8 +20,8 @@
                 }
                 await context.Response.WriteAsync("Class Custom Middleware \n");
             }
-        
-        await _next(context);
+
+            await _next(context);
         }
     }
 }

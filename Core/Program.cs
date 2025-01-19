@@ -1,14 +1,19 @@
 using Core;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<FruitOptions>(Options =>
+{
+    Options.Name = "Watermelon";
+});
+
 var app = builder.Build();
 
-((IApplicationBuilder)app).Map("/branch", branch =>
+app.MapGet("/fruits", async (HttpContext context, IOptions<FruitOptions> FruitOptions) =>
 {
-    branch.Use(async (HttpContext context, Func<Task> next) =>
-    {
-        await context.Response.WriteAsync("Branch Middleware");
-    });
+    FruitOptions options = FruitOptions.Value;
+    await context.Response.WriteAsync(options.Name + " " + options.Colour);
 });
 
 app.UseMiddleware<Middleware>();
