@@ -44,6 +44,13 @@ app.MapGet($"{BASEURL}/{{id}}", async (HttpContext context, DataContext data) =>
 });
 
 
+// Getting all products from product table.
+app.MapGet($"{BASEURL}", async (HttpContext context, DataContext data) =>
+{
+    
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync(JsonSerializer.Serialize<IEnumerable<Product>>(data.Products));
+});
 
 
 
